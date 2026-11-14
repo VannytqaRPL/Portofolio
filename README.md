@@ -24,5 +24,5 @@ Website ini tampil rapi di ponsel, tablet, dan laptop.
 
 ## Tautan
 
-- Website: menyusul setelah _deploy_ ke Vercel
+- Website: https://portofolio-irvanda.vercel.app/
 - Dibuat oleh: Irvanda Maulana Alhafidh, SMKN 1 Jenangan
