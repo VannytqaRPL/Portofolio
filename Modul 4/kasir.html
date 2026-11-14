@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+
+    /* Memastikan padding tidak membuat elemen meluber */
+* {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   MODE LAPTOP (Maksimal 1024px)
+   ========================================= */
+@media screen and (max-width: 1024px) {
+  body {
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 95%;
+    padding: 25px;
+  }
+
+  input {
+    width: 180px;
+  }
+}
+
+/* =========================================
+   MODE TABLET (Maksimal 768px)
+   ========================================= */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  .container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  input {
+    width: 46%; /* Membuat 2 input sejajar rapi dalam 1 baris */
+    margin: 5px 1%;
+  }
+
+  button {
+    width: 46%;
+    margin: 5px 1%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto; /* Tabel bisa di-scroll ke samping jika kolom terlalu banyak */
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/* =========================================
+   MODE PONSEL (Maksimal 360px - 480px)
+   ========================================= */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  input,
+  button {
+    width: 100%; /* Input dan tombol memenuhi lebar layar ke bawah */
+    margin: 5px 0;
+  }
+
+  th,
+  td {
+    padding: 6px;
+    font-size: 13px;
+  }
+
+  .total {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .kembalian {
+    font-size: 18px;
+  }
+}
+</style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Aplikasi Kasir</h2>
+      <h2>Toko Serba Ada</h2>
+
+      <h3>Input Barang</h3>
+
+      <input type="text" id="namaBarang" placeholder="Nama Barang" />
+      <input type="number" id="hargaBarang" placeholder="Harga" />
+      <input type="number" id="jumlahBarang" placeholder="Jumlah" />
+
+      <button onclick="tambahBarang()">Tambahkan Barang</button>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Barang</th>
+            <th>Harga</th>
+            <th>Jumlah</th>
+            <th>Subtotal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody id="daftarBarang"></tbody>
+      </table>
+
+      <div class="total">
+        <p>Subtotal : Rp <span id="subtotal">0</span></p>
+
+        <p>Diskon : Rp <span id="diskon">0</span></p>
+
+        <p>
+          <b> Total Bayar : Rp <span id="totalBayar">0</span></b>
+        </p>
+
+        <hr />
+
+        <label>Uang Bayar:</label>
+
+        <input type="number" id="uangBayar" placeholder="Masukkan Uang" />
+        <button onclick="hitungkembalian()">Kembalian</button>
+
+        <p class="kembalian">Kembalian : Rp <span id="kembalian">0</span></p>
+      </div>
+
+      <button onclick="resetKasir()">Reset</button>
+    </div>
+
+    <script>
+      // menyimpan data array
+      let keranjang = [];
+
+      // 1.menghitung subtotal barang
+      function hitungSubtotal(harga, jumlah) {
+        return harga * jumlah;
+      }
+
+      // 2.Menentukan Diskon
+      function hitungDiskon(total) {
+        if (total >= 500000) {
+          return total * 0.100;
+        } else if (total >= 250000) {
+          return total * 0.1;
+        } else if (total >= 100000) {
+          return total * 0.05;
+        } else {
+          return 0;
+        }
+      }
+
+      //3.menghitung total
+      function hitungTotal(subtotal, diskon) {
+        return subtotal - diskon;
+      }
+
+      //4.tambah barang
+      function tambahBarang() {
+        let nama = document.getElementById("namaBarang").value;
+        let harga = Number(document.getElementById("hargaBarang").value);
+        let jumlah = Number(document.getElementById("jumlahBarang").value);
+
+        // validasi input
+        if (nama === "" || harga <= 0 || jumlah <= 0) {
+          alert("Data Belum Lengkap");
+          return;
+        }
+
+        // hitung subtotal
+        let subtotal = hitungSubtotal(harga, jumlah);
+
+        // masukkan ke array
+        keranjang.push({
+          nama: nama,
+          harga: harga,
+          jumlah: jumlah,
+          subtotal: subtotal,
+        });
+
+        // tampilkan data
+        tampilkanBarang();
+
+        // kosongkan
+        document.getElementById("namaBarang").value = "";
+        document.getElementById("hargaBarang").value = "";
+        document.getElementById("jumlahBarang").value = "";
+      }
+
+      // 5.menampilkan barang
+      function tampilkanBarang() {
+        let tabel = document.getElementById("daftarBarang");
+        tabel.innerHTML = "";
+        keranjang.forEach(function (barang, index) {
+          tabel.innerHTML += `
+    
+    <tr>
+        <td>${index + 1}</td>
+        <td>${barang.nama}</td>
+       <td>
+        Rp ${barang.harga.toLocaleString("id-ID")}
+        </td>
+        <td>${barang.jumlah}</td>
+        <td>
+            Rp ${barang.subtotal.toLocaleString("id-ID")}
+         </td>
+         <td>
+            <button onclick="hapusBarang(${index})">Hapus</button>
+            </td>
+            </tr>
+            `;
+        });
+
+        hitungSemuaTotal();
+      }
+
+      //6.MENGHAPUS SEMUA BARANG
+      function hapusBarang(index) {
+        keranjang.splice(index, 1);
+        tampilkanBarang();
+      }
+
+      //7.hitung semua total
+      function hitungSemuaTotal() {
+        let subtotal = 0;
+        // perulangan array
+        for (let i = 0; i < keranjang.length; i++) {
+          subtotal += keranjang[i].subtotal;
+        }
+
+        // hitung diskon
+        let diskon = hitungDiskon(subtotal);
+
+        // hitung total
+        let total = hitungTotal(subtotal, diskon);
+
+        // tampilkan hasil
+        document.getElementById("subtotal").innerText =
+          subtotal.toLocaleString("id-ID");
+        document.getElementById("diskon").innerHTML =
+          diskon.toLocaleString("id-ID");
+        document.getElementById("totalBayar").innerText =
+          total.toLocaleString("id-ID");
+      }
+
+      //8.Menghitung Kembalian
+      function hitungkembalian() {
+        let totalText = document.getElementById("totalBayar").innerText;
+        let total = Number(totalText.replace(/\./g, ""));
+        let uang = Number(document.getElementById("uangBayar").value);
+        if (uang <= 0) {
+          alert("Masukkan Uang Pembayaran");
+          return;
+        }
+        if (uang < total) {
+          alert("Uang Anda Kurang");
+          return;
+        }
+
+        let kembalian = uang - total;
+
+        document.getElementById("kembalian").innerText =
+          kembalian.toLocaleString("id-ID");
+      }
+
+      //9.Reset
+      function resetKasir() {
+        keranjang = [];
+        document.getElementById("namaBarang").value = "";
+        document.getElementById("hargaBarang").value = "";
+        document.getElementById("jumlahBarang").value = "";
+        document.getElementById("uangBayar").value = "";
+        document.getElementById("kembalian").innerText = "0";
+        tampilkanBarang();
+      }
+    </script>
+  </body>
+</html>
