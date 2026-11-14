@@ -17,4 +17,4 @@ jadwal belajar
 - VS Code dan Live Server
 ## Tautan
 - Website: menyusul setelah *deploy* ke Vercel
-- Dibuat oleh: Irvanda Maulana Alhafidh, SMK Mitra
+- Dibuat oleh: Irvanda Maulana Alhafidh, SMKN 1 Jenangan
