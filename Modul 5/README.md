@@ -1,8 +1,4 @@
 # Portofolio Irvanda Maulana Alhafidh
-Website Portofolio pribadi saya yang saya buat di Kelas Industri UBIG (Paket 1,minggu 1 sampai 5)
-Website ini tampil rapi di ponsel,tablet dan laptop
-
-# Portofolio Andi Pratama
 Website portofolio pribadi yang saya buat di Kelas Industri UBIG
 (Paket 1, Minggu 01 sampai 05).
 Website ini tampil rapi di ponsel, tablet, dan laptop.
